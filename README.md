@@ -101,8 +101,12 @@ hardware** — expect to iterate. In rough order of risk:
 3. **Key positions.** Confirm every key produces the right output and the halves
    aren't mirrored. If positions are off, it's the matrix transform / column
    offset.
-4. **RGB is intentionally not driven from the dongle** in this first cut (the
-   LEDs live on the halves). Underglow starts off. This can be added later via
-   split RGB forwarding.
+4. **RGB underglow is disabled on the halves** in this first cut. The Go60's
+   underglow status indicators (layer/battery/BLE) only link when the board is
+   the central, which the halves no longer are. Plain RGB *lighting* can be
+   restored later by re-enabling `CONFIG_ZMK_RGB_UNDERGLOW` on the halves and
+   deleting the `underglow_indicators` node (see the note in
+   `go60_lh_peripheral.conf`); full status indication would need split RGB
+   forwarding from the dongle.
 
 Derived from the stock MoErgo `go60-zmk-config` and `moergo-sc/zmk`.
