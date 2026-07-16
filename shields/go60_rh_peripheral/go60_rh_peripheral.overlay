@@ -1,0 +1,15 @@
+/*
+ * Keeps the stock go60_rh board as a BLE split PERIPHERAL of the dongle.
+ *
+ * The right half is already a peripheral and already forwards its Cirque as an
+ * input-split at reg 0 (device = &glidepoint), which matches the dongle's
+ * cirque_rh_split@0. The only change needed is to drop the inter-half wired
+ * split so it is a pure BLE peripheral of the dongle.
+ *
+ * (If the half refuses to pair with the dongle, try removing this block to
+ * leave the wired transport in place.)
+ */
+
+&{/split_config} {
+    status = "disabled";
+};

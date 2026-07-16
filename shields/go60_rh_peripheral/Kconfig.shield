@@ -1,0 +1,2 @@
+config SHIELD_GO60_RH_PERIPHERAL
+    def_bool $(shields_list_contains,go60_rh_peripheral)

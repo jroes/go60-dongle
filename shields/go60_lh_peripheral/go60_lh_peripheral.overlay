@@ -1,0 +1,48 @@
+/*
+ * Converts the stock go60_lh board (normally the CENTRAL) into a BLE split
+ * PERIPHERAL that talks to the dongle.
+ *
+ * Stock go60_lh wiring we override:
+ *   - cirque_lh_listener : local listener on the LEFT Cirque (central behaviour)
+ *   - cirque_split@0     : central-side receiver for the RIGHT Cirque
+ *   - cirque_rh_listener : listener for that received RIGHT Cirque
+ *   - /split_config      : the inter-half wired (TRRS) split
+ *
+ * As a peripheral the half must instead FORWARD its own (left) Cirque to the
+ * central, and it no longer receives the other half's pad. It forwards at
+ * reg 1 (the right half uses reg 0) so the dongle can tell the two apart.
+ */
+
+/* No local HID and no central receivers on a peripheral. */
+&cirque_lh_listener {
+    status = "disabled";
+};
+
+&cirque_rh_listener {
+    status = "disabled";
+};
+
+/* The stock node was the central-side RIGHT receiver; not used on a peripheral. */
+&cirque_split {
+    status = "disabled";
+};
+
+/* Forward the LEFT Cirque to the dongle central as an input-split at reg 1. */
+/ {
+    inputs {
+        cirque_lh_fwd: cirque_lh_fwd@1 {
+            compatible = "zmk,input-split";
+            reg = <1>;
+            device = <&glidepoint>;
+        };
+    };
+};
+
+/*
+ * Drop the inter-half wired split so this half is a pure BLE peripheral of the
+ * dongle. (If a half refuses to pair with the dongle, try removing this block
+ * to leave the wired transport in place.)
+ */
+&{/split_config} {
+    status = "disabled";
+};

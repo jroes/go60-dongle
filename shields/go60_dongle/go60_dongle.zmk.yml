@@ -1,0 +1,9 @@
+file_format: "1"
+id: go60_dongle
+name: Go60 Dongle
+type: shield
+url: https://github.com/jroes/go60-dongle
+requires: [seeed_xiao]
+features:
+  - keys
+  - pointer
