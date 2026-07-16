@@ -19,6 +19,13 @@ jobs:
       - name: Copy custom shields into ZMK
         run: cp -r shields/* src/app/boards/shields/
 
+      # The XIAO board ships a loose app/boards/seeeduino_xiao_ble.overlay.
+      # With MoErgo's -DBOARD_ROOT=. that file is discovered twice and ninja
+      # errors ("defined as an output multiple times"). Its contents are folded
+      # into shields/go60_dongle/go60_dongle.overlay, so remove the loose copy.
+      - name: Drop duplicate XIAO board overlay
+        run: rm -f src/app/boards/seeeduino_xiao_ble.overlay
+
       - uses: cachix/install-nix-action@v25
         with:
           nix_path: nixpkgs=channel:nixos-22.05
